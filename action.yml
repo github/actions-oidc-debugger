@@ -1,0 +1,11 @@
+name: 'OIDC Debugger'
+description: 'Print the GitHub Actions OIDC claims.'
+inputs:
+  audience:
+    description: 'The audience to use when requesting the JWT.'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.audience }}

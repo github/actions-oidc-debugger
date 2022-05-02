@@ -1,0 +1,19 @@
+---
+name: Test OIDC Debugger
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v3
+      - name: run oidc-debug.go
+        run: go run cmd/oidc-debug.go -audience "https://github.com/github"
