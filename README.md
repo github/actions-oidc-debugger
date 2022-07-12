@@ -2,7 +2,10 @@
 
 This action requests a JWT and prints the claims included within the JWT received from GitHub Actions.
 
-## Usage
+## How to use this Action
+
+To use this Action in another repository, you must checkout this Action repo and then run it.
+Here's an example of how that is done:
 
 ```yaml
 
@@ -16,10 +19,15 @@ jobs:
     runs-on: ubuntu-latest
     name: A test of the oidc debugger
     steps:
-      - name: Checkout
+      - name: Checkout actions-oidc-debugger
         uses: actions/checkout@v3
-      - name: Debug OIDC Claims
-        uses: github/actions-oidc-debugger@v1
         with:
-          audience: 'https://github.com/github
+          repository: github/actions-oidc-debugger
+          ref: main
+          token: ${{ secrets.your-checkout-token }}
+          path: ./.github/actions/actions-oidc-debugger
+      - name: Debug OIDC Claims
+        uses: ./.github/actions/actions-oidc-debugger
+        with:
+          audience: 'https://github.com/github'
 ```
