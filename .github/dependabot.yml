@@ -1,0 +1,34 @@
+---
+version: 2
+registries:
+  ghcr:
+    type: docker-registry
+    url: ghcr.io
+    username: PAT
+    password: "${{secrets.CONTAINER_BUILDER_TOKEN}}"
+updates:
+- package-ecosystem: bundler
+  vendor: true
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: "tuesday"
+    time: "21:00"
+  reviewers:
+  - github/security-ops-reviewers
+- package-ecosystem: docker
+  directory: "/"
+  registries:
+  - ghcr
+  schedule:
+    interval: weekly
+    day: "tuesday"
+    time: "21:00"
+  reviewers:
+  - github/security-ops-reviewers
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: "tuesday"
+    time: "21:00"
