@@ -7,7 +7,7 @@ registries:
     username: PAT
     password: "${{secrets.CONTAINER_BUILDER_TOKEN}}"
 updates:
-- package-ecosystem: bundler
+- package-ecosystem: gomod
   vendor: true
   directory: "/"
   schedule:
