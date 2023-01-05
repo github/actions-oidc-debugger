@@ -7,8 +7,8 @@ ownership:
   description: GitHub Action for Debugging OIDC Claims
   kind: code
   repo: https://github.com/github/actions-oidc-debugger
-  team: github/security-ops
-  maintainer: mrsbworth
+  team: github/sae-iam
+  maintainer: admgc
   exec_sponsor: alexiswales
   sev3:
     issue: https://github.com/github/actions-oidc-debugger/issues
