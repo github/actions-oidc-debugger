@@ -14,7 +14,7 @@ updates:
     day: "tuesday"
     time: "21:00"
   reviewers:
-  - github/sae-iam
+  - github/sae-iam-reviewers
 - package-ecosystem: docker
   directory: "/"
   registries:
@@ -24,7 +24,7 @@ updates:
     day: "tuesday"
     time: "21:00"
   reviewers:
-  - github/sae-iam
+  - github/sae-iam-reviewers
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
