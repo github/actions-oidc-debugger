@@ -1,10 +1,13 @@
 package actionsoidc
 
 import (
+	"crypto/rsa"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/big"
 	"net/http"
 	"net/url"
 	"os"
@@ -25,6 +28,21 @@ type ActionsJWT struct {
 	Count       int
 	Value       string
 	ParsedToken *jwt.Token
+}
+
+type JWK struct {
+	N   string
+	Kty string
+	Kid string
+	Alg string
+	E   string
+	Use string
+	X5c []string
+	X5t string
+}
+
+type JWKS struct {
+	Keys []JWK
 }
 
 func GetEnvironmentVariable(e string) (string, error) {
@@ -117,20 +135,71 @@ func (c *ActionsOIDCClient) CreateOIDCClientFromValue(rawValue []byte) (*Actions
 	return &jwt, nil
 }
 
-func (j *ActionsJWT) Parse() {
-	token, err := jwt.Parse(j.Value, func(token *jwt.Token) (interface{}, error) {
-		// Don't forget to validate the alg is what you expect:
+func getKeyFromJwks(jwksBytes []byte) func(*jwt.Token) (interface{}, error) {
+	return func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
 
-		// we don't need a real check here
-		return []byte{}, nil
-	})
+		var jwks JWKS
+		if err := json.Unmarshal(jwksBytes, &jwks); err != nil {
+			return nil, fmt.Errorf("Unable to parse JWKS")
+		}
 
+		for _, jwk := range jwks.Keys {
+			if jwk.Kid == token.Header["kid"] {
+				nBytes, err := base64.RawURLEncoding.DecodeString(jwk.N)
+				if err != nil {
+					return nil, fmt.Errorf("Unable to parse key")
+				}
+				var n big.Int
+
+				eBytes, err := base64.RawURLEncoding.DecodeString(jwk.E)
+				if err != nil {
+					return nil, fmt.Errorf("Unable to parse key")
+				}
+				var e big.Int
+
+				key := rsa.PublicKey{
+					N: n.SetBytes(nBytes),
+					E: int(e.SetBytes(eBytes).Uint64()),
+				}
+
+				return &key, nil
+			}
+		}
+
+		return nil, fmt.Errorf("Unknown kid: %v", token.Header["kid"])
+	}
+}
+
+func (j *ActionsJWT) Parse() {
+	// get jwks
+	resp, err := http.Get("https://token.actions.githubusercontent.com/.well-known/jwks")
 	if err != nil {
+		fmt.Println(err)
+	}
+
+	jwksBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	token, err := jwt.Parse(string(j.Value), getKeyFromJwks(jwksBytes))
+	if err != nil || !token.Valid {
+		fmt.Println("unable to validate jwt")
 		log.Fatal(err)
 	}
+
+	// token, err := jwt.Parse(j.Value, func(token *jwt.Token) (interface{}, error) {
+	// 	// Don't forget to validate the alg is what you expect:
+	// 	if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
+	// 		return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+	// 	}
+
+	// we don't need a real check here
+	// return []byte{}, nil
+	// })
 
 	j.ParsedToken = token
 }
