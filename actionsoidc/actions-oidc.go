@@ -120,7 +120,7 @@ func (c *ActionsOIDCClient) CreateOIDCClientFromValue(rawValue []byte) (*Actions
 func (j *ActionsJWT) Parse() {
 	token, err := jwt.Parse(j.Value, func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
