@@ -20,7 +20,7 @@ func main() {
 
 	contents, err := os.ReadFile(*tokenPath)
 	actionsoidc.QuitOnErr(err)
-	jwt, err := c.ParseJWTFromJSON(contents)
+	jwt, err := c.CreateOIDCClientFromValue(contents)
 	actionsoidc.QuitOnErr(err)
 
 	jwt.Parse()

@@ -111,10 +111,10 @@ func (c *ActionsOIDCClient) GetJWT() (*ActionsJWT, error) {
 	return &jwt, err
 }
 
-func (c *ActionsOIDCClient) ParseJWTFromJSON(rawBody []byte) (*ActionsJWT, error) {
+func (c *ActionsOIDCClient) CreateOIDCClientFromValue(rawValue []byte) (*ActionsJWT, error) {
 	var jwt ActionsJWT
-	err := json.Unmarshal(rawBody, &jwt)
-	return &jwt, err
+	jwt.Value = string(rawValue)
+	return &jwt, nil
 }
 
 func (j *ActionsJWT) Parse() {
