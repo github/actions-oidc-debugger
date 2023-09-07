@@ -3,21 +3,24 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 
 	"github.com/github/actions-oidc-debugger/actionsoidc"
 )
 
 func main() {
-
-	audience := flag.String("audience", "https://github.com/", "the audience for the requested jwt")
+	tokenPath := flag.String("token-path", "oidc-token", "the path to the token to debug")
 	flag.Parse()
 
-	if *audience == "https://github.com/" {
-		actionsoidc.QuitOnErr(fmt.Errorf("-audience cli argument must be specified"))
+	if *tokenPath == "oidc-token" {
+		actionsoidc.QuitOnErr(fmt.Errorf("token-path must be specified"))
 	}
 
-	c := actionsoidc.DefaultOIDCClient(*audience)
-	jwt, err := c.GetJWT()
+	c := actionsoidc.DefaultOIDCClient("blah-dont-care-right-now")
+
+	contents, err := os.ReadFile(*tokenPath)
+	actionsoidc.QuitOnErr(err)
+	jwt, err := c.ParseJWTFromJSON(contents)
 	actionsoidc.QuitOnErr(err)
 
 	jwt.Parse()

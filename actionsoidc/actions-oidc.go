@@ -111,8 +111,14 @@ func (c *ActionsOIDCClient) GetJWT() (*ActionsJWT, error) {
 	return &jwt, err
 }
 
+func (c *ActionsOIDCClient) ParseJWTFromJSON(rawBody []byte) (*ActionsJWT, error) {
+	var jwt ActionsJWT
+	err := json.Unmarshal(rawBody, &jwt)
+	return &jwt, err
+}
+
 func (j *ActionsJWT) Parse() {
-	j.ParsedToken, _ = jwt.Parse(j.Value, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(j.Value, func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -121,6 +127,12 @@ func (j *ActionsJWT) Parse() {
 		// we don't need a real check here
 		return []byte{}, nil
 	})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	j.ParsedToken = token
 }
 
 func (j *ActionsJWT) PrettyPrintClaims() string {
