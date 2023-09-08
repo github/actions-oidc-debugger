@@ -205,6 +205,8 @@ func (j *ActionsJWT) Parse() {
 }
 
 func (j *ActionsJWT) PrettyPrintClaims() string {
+	fmt.Println(j.ParsedToken.Header)
+
 	if claims, ok := j.ParsedToken.Claims.(jwt.MapClaims); ok {
 		jsonClaims, err := json.MarshalIndent(claims, "", "  ")
 		if err != nil {
