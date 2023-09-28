@@ -76,6 +76,7 @@ func (c *ActionsOIDCClient) BuildTokenURL() error {
 		query := parsed_url.Query()
 		query.Set("audience", c.Audience)
 		parsed_url.RawQuery = query.Encode()
+		c.TokenRequestURL = parsed_url.String()
 	}
 	return nil
 }
