@@ -29,5 +29,5 @@ jobs:
       - name: Debug OIDC Claims
         uses: ./.github/actions/actions-oidc-debugger
         with:
-          audience: 'https://github.com/github'
+          audience: '${{ github.server_url }}/${{ github.repository_owner }}'
 ```

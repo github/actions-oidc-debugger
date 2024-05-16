@@ -2,7 +2,7 @@ name: 'OIDC Debugger'
 description: 'Print the GitHub Actions OIDC claims.'
 inputs:
   audience:
-    description: 'The audience to use when requesting the JWT.'
+    description: 'The audience to use when requesting the JWT. Your Github server URL and repository owner.'
     required: true
 runs:
   using: 'docker'
