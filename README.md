@@ -4,8 +4,7 @@ This action requests a JWT and prints the claims included within the JWT receive
 
 ## How to use this Action
 
-To use this Action in another repository, you must checkout this Action repo and then run it.
-Here's an example of how that is done:
+Here's an example of how to use that action:
 
 ```yaml
 
@@ -19,15 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     name: A test of the oidc debugger
     steps:
-      - name: Checkout actions-oidc-debugger
-        uses: actions/checkout@v3
-        with:
-          repository: github/actions-oidc-debugger
-          ref: main
-          token: ${{ secrets.your-checkout-token }}
-          path: ./.github/actions/actions-oidc-debugger
       - name: Debug OIDC Claims
-        uses: ./.github/actions/actions-oidc-debugger
+        uses: github/actions-oidc-debugger@main
         with:
           audience: '${{ github.server_url }}/${{ github.repository_owner }}'
 ```
