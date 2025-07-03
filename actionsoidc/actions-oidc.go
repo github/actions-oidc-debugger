@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 type ActionsOIDCClient struct {

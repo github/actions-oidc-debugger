@@ -1,68 +1,29 @@
----
 version: 2
 
-registries:
-  ghcr:
-    type: "docker-registry"
-    url: "ghcr.io"
-    username: "PAT"
-    password: "${{secrets.CONTAINER_BUILDER_TOKEN}}"
-  rubygems-github-packages:
-    type: "rubygems-server"
-    url: "rubygems.pkg.github.com/github"
-    token: "${{secrets.CONTAINER_BUILDER_TOKEN}}"
-
 updates:
-  - package-ecosystem: "bundler"
-    vendor: true
+  - package-ecosystem: gomod
     directory: "/"
-    registries: ["rubygems-github-packages"]
-    groups:
-      ruby-gems-production:
-        dependency-type: "production"
-        patterns: ["*"]
-      dev-ruby-development:
-        dependency-type: "development"
-        patterns: ["*"]
     schedule:
-      interval: "weekly"
-    reviewers: ["github/sae-reviewers"]
+      interval: monthly
+    groups:
+      go-dependencies:
+        patterns:
+          - "*"
 
-  - package-ecosystem: "docker"
+  - package-ecosystem: docker
     directory: "/"
-    registries: ["ghcr"]
-    groups:
-      container-images:
-        patterns: ["*"]
     schedule:
-      interval: "weekly"
-    reviewers: ["github/sae-reviewers"]
+      interval: monthly
+    groups:
+      docker-dependencies:
+        patterns:
+          - "*"
 
-  - package-ecosystem: "github-actions"
+  - package-ecosystem: github-actions
     directory: "/"
     groups:
       github-actions:
-        patterns: ["*"]
-    ignore:
-      - dependency-name: "github/internal-actions"
+        patterns:
+          - "*"
     schedule:
-      interval: "weekly"
-    reviewers: ["github/sae-reviewers"]
-
-  - package-ecosystem: "pip"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    groups:
-      python-packages:
-        patterns: ["*"]
-    reviewers: ["github/sae-reviewers"]
-
-  - package-ecosystem: "gomod"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    groups:
-      go-packages:
-        patterns: ["*"]
-    reviewers: ["github/sae-reviewers"]
+      interval: monthly
