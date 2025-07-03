@@ -1,5 +1,8 @@
 name: 'OIDC Debugger'
 description: 'Print the GitHub Actions OIDC claims.'
+branding:
+  icon: 'activity'
+  color: 'red'
 inputs:
   audience:
     description: 'The audience to use when requesting the JWT. Your Github server URL and repository owner (e.g. https://github.com/github).'

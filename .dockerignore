@@ -1,0 +1,11 @@
+.devcontainer/
+.github/
+.git/
+script/
+action.yml
+Dockerfile
+LICENSE
+README.md
+tmp/
+.vscode/
+docs/

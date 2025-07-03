@@ -15,5 +15,12 @@ jobs:
     steps:
       - name: git checkout
         uses: actions/checkout@v4
+
+      - name: setup go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
       - name: run oidc-debug.go
         run: go run cmd/oidc-debug.go -audience "https://github.com/github"
