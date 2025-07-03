@@ -65,3 +65,19 @@ The resulting output in your Actions log will look something like this:
   "workflow_sha": "7f93a73b8273af5d35fcd70661704c1cadc57054"
 }
 ```
+
+## Maintainers
+
+Here is the general flow for developing this Action and releasing a new version:
+
+### Bootstrapping
+
+This assumes you have `goenv` installed and the version listed in the `.go-version` file is installed as well.
+
+```bash
+go mod vendor && go mod tidy && go mod verify
+```
+
+### Releasing
+
+Please run `script/release` and publish a new release on GitHub from the resulting tag.
