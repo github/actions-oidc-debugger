@@ -24,3 +24,6 @@ jobs:
 
       - name: run oidc-debug.go
         run: go run cmd/oidc-debug.go -audience "https://github.com/github"
+
+      - name: docker build
+        run: docker build -t actions-oidc-debugger .
