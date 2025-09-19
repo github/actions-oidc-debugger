@@ -15,7 +15,7 @@ jobs:
     name: A test of the oidc debugger
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Debug OIDC Claims
         uses: ./
         with:
